@@ -44,6 +44,65 @@ def view_inventory():
         quantity = details['quantity']
         print(f"{item_id:<10} | {name:<20} | ${price:<9.2f} | {quantity:<10}")
         print("_"*90)
+def remove_item():
+    x = input("Enter the unique ID of the item you want to delete: ").strip()
+    
+    if x in inventory:
+        removed_item = inventory.pop(x)  # removes and returns the item details
+        print(f"\nSuccess! Item with ID '{x}' ({removed_item['name']}) has been removed successfully.")
+    else:
+        print("\nError: The ID doesn't exist in the inventory!")
+def update_item():
+    item_id = input("Enter the unique ID of the item you want to update: ").strip()
+    
+    if item_id not in inventory:
+        print(f"\nError: Item ID '{item_id}' not found in inventory.")
+        return
+    
+    item = inventory[item_id]
+    print(f"\nCurrent details of '{item_id}': {item}")
+    
+    print("\nWhat would you like to update?")
+    print("1. Name")
+    print("2. Price")
+    print("3. Quantity")
+    print("4. All fields")
+    
+    choice = input("Enter your choice (1-4): ").strip()
+    
+    if choice == "1":
+        new_name = input("Enter new name: ").strip()
+        item["name"] = new_name
+    elif choice == "2":
+        try:
+            new_price = float(input("Enter new price: "))
+            item["price"] = new_price
+        except ValueError:
+            print("Error: Price must be a number.")
+            return
+    elif choice == "3":
+        try:
+            new_quantity = int(input("Enter new quantity: "))
+            item["quantity"] = new_quantity
+        except ValueError:
+            print("Error: Quantity must be an integer.")
+            return
+    elif choice == "4":
+        new_name = input("Enter new name: ").strip()
+        try:
+            new_price = float(input("Enter new price: "))
+            new_quantity = int(input("Enter new quantity: "))
+        except ValueError:
+            print("Error: Price must be a number and Quantity must be an integer.")
+            return
+        item["name"] = new_name
+        item["price"] = new_price
+        item["quantity"] = new_quantity
+    else:
+        print("Invalid choice. Update cancelled.")
+        return
+    
+    print(f"\nSuccess! Item '{item_id}' has been updated to: {item}")
 def main():
     """
     The main function to run the inventory management system application.
@@ -52,9 +111,8 @@ def main():
         print("\n--- Inventory Management System ---")
         print("1. Add New Item")
         print("2. View Inventory")
-        # --- Placeholders for future features ---
-        print("3. Update Item (Coming Soon)")
-        print("4. Remove Item (Coming Soon)")
+        print("3. Update Item")
+        print("4. Remove Item")
         print("5. Exit")
         print("-----------------------------------")
         
@@ -65,11 +123,9 @@ def main():
         elif choice == '2':
             view_inventory()
         elif choice == '3':
-            # update_item() # We will build this next!
-            print("Feature coming soon!")
+            update_item()
         elif choice == '4':
-            # remove_item() # And this one!
-            print("Feature coming soon!")
+            remove_item()
         elif choice == '5':
             print("Exiting program. Goodbye!")
             break
