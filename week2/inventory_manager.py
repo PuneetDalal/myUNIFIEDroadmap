@@ -30,3 +30,18 @@ def add_item():
     }
     
     print(f"\nSuccess! Item '{item_name}' (ID: {item_id}) was added.")
+def view_inventory():
+    """ADDED the feature of view inventory .
+    deletion and updateing element features coming soon"""
+    print("---    Inventory    ---")
+    if not inventory:
+        print("The inventory is currently empty.")
+        return
+    print(f"{'ID':<10}|{'Name':<20}|{'Price':<10}|{'Quantity':<10}")
+    print("_"*90)
+    for item_id,details in inventory.items():
+        name=details['name']
+        price = details['price']
+        quantity = details['quantity']
+        print(f"{item_id:<10} | {name:<20} | ${price:<9.2f} | {quantity:<10}")
+        print("_"*90)
