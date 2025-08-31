@@ -1,6 +1,30 @@
+import json
 import pprint
+inventory_file = 'inventory.json'
 inventory = {}
+
 # inventory_manager.py
+def load_inventory():
+    """Loads the inventory data from a JSON file."""
+    global inventory
+    try:
+        with open(inventory_file, 'r') as file:
+            inventory = json.load(file)
+        print("Inventory loaded successfully.")
+    except FileNotFoundError:
+        print("Inventory file not found. Starting with an empty inventory.")
+        inventory = {}
+    except json.JSONDecodeError:
+        print("Error decoding JSON. Starting with an empty inventory.")
+        inventory = {}
+def save_inventory():
+    """Saves the current inventory data to a JSON file."""
+    try:
+        with open(inventory_file, 'w') as file:
+            json.dump(inventory, file, indent=4)
+        print("Inventory saved successfully.")
+    except IOError:
+        print("Error writing to inventory file.")
 def add_item():
     """
     Adds a single, well-structured item to the inventory.
@@ -29,6 +53,7 @@ def add_item():
     }
     
     print(f"\nSuccess! Item '{item_name}' (ID: {item_id}) was added.")
+    save_inventory()
 def view_inventory():
     """ADDED the feature of view inventory .
     deletion and updateing element features coming soon"""
@@ -50,6 +75,7 @@ def remove_item():
     if x in inventory:
         removed_item = inventory.pop(x)  # removes and returns the item details
         print(f"\nSuccess! Item with ID '{x}' ({removed_item['name']}) has been removed successfully.")
+        save_inventory()
     else:
         print("\nError: The ID doesn't exist in the inventory!")
 def update_item():
@@ -98,6 +124,7 @@ def update_item():
         item["name"] = new_name
         item["price"] = new_price
         item["quantity"] = new_quantity
+        save_inventory()
     else:
         print("Invalid choice. Update cancelled.")
         return
@@ -107,6 +134,7 @@ def main():
     """
     The main function to run the inventory management system application.
     """
+    load_inventory()
     while True:
         print("\n--- Inventory Management System ---")
         print("1. Add New Item")
@@ -128,6 +156,7 @@ def main():
             remove_item()
         elif choice == '5':
             print("Exiting program. Goodbye!")
+            save_inventory()
             break
         else:
             print("Invalid choice. Please enter a number between 1 and 5.")
